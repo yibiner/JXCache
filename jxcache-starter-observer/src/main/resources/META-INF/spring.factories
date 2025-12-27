@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+dev.yibin.jxcache.observer.starter.ObserverAutoConfiguration
+

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>dev.yibin</groupId>
+        <artifactId>jxcache</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <artifactId>jxcache-tests</artifactId>
+    <packaging>jar</packaging>
+
+    <name>jxcache-tests</name>
+    <description>JXCache 集成与功能测试模块。</description>
+
+    <dependencies>
+        <!-- 内部依赖 -->
+        <dependency>
+            <groupId>dev.yibin</groupId>
+            <artifactId>jxcache-starter-observer</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>dev.yibin</groupId>
+            <artifactId>jxcache-starter-aggregator-core</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>dev.yibin</groupId>
+            <artifactId>jxcache-registry-fixed</artifactId>
+        </dependency>
+        
+        <!-- Spring Boot 启动器 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        
+        <!-- JetCache 依赖 -->
+        <dependency>
+            <groupId>com.alicp.jetcache</groupId>
+            <artifactId>jetcache-anno</artifactId>
+        </dependency>
+        
+        <!-- JetCache Spring Boot 启动器（用于自动配置 GlobalCacheConfig） -->
+        <!-- 注意：测试环境不使用 Redis，仅使用本地缓存（Caffeine） -->
+        <!-- 如需测试 Redis 相关功能，请使用 samples/ocean 示例项目 -->
+        <dependency>
+            <groupId>com.alicp.jetcache</groupId>
+            <artifactId>jetcache-starter-redis</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alicp.jetcache</groupId>
+            <artifactId>jetcache-starter-redis-lettuce</artifactId>
+        </dependency>
+
+        <!-- 测试依赖（spring-boot-starter-test 已包含 junit、mockito、assertj） -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.junit.vintage</groupId>
+                    <artifactId>junit-vintage-engine</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>dev.yibin</groupId>
+            <artifactId>jxcache-registry-nacos</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- 跳过安装到本地仓库（tests 模块不需要安装） -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>2.5.2</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+
+
+
+
+
+

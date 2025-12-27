@@ -1,0 +1,74 @@
+server:
+  port: 0
+
+spring:
+  application:
+    name: test-app  # 避免 Nacos 客户端报错（即使不使用 Nacos）
+  cloud:
+    nacos:
+      discovery:
+        enabled: false  # 禁用 Spring Cloud Alibaba Nacos Discovery 自动配置
+        server-addr: ""  # 清空服务器地址，避免尝试连接
+      config:
+        enabled: false  # 禁用 Spring Cloud Alibaba Nacos Config 自动配置
+
+logging:
+  level:
+    root: WARN
+    dev.yibin.jxcache: WARN
+    org.springframework: WARN
+    org.apache.catalina: WARN
+    org.apache.tomcat: WARN
+    com.alicp.jetcache: WARN
+
+jxc:
+  observer:
+    enabled: true
+    maxPageSize: 200
+    maxValuePreview: 200
+    totalShards: 8
+
+  aggregator:
+    enabled: true
+    perNodeTimeoutMs: 2000
+    totalTimeoutMs: 4000
+    maxConcurrency: 16
+    maxPageSize: 200
+    observerScanPath: /api/jxc/observer/query
+    observerEntryPath: /api/jxc/observer/entry
+    observerInvalidatePath: /api/jxc/observer/invalidate
+
+  registry:
+    # 测试环境禁用 Nacos 注册中心（使用 Fixed Registry）
+    nacos:
+      enabled: false
+    fixed:
+      enabled: true
+      services:
+        - name: demo-app
+          nodes:
+            - nodeId: n1
+              host: 127.0.0.1
+              port: 18081
+            - nodeId: n2
+              host: 127.0.0.1
+              port: 18082
+
+  # 测试环境禁用广播监控功能（避免 AOP 相关依赖问题）
+  broadcast:
+    monitor:
+      enabled: false
+
+jetcache:
+  statIntervalMinutes: 15
+  areaInCacheName: false
+  local:
+    default:
+      type: caffeine
+      limit: 100
+      expireAfterWriteInMillis: 100000
+    test:
+      type: caffeine
+      limit: 200
+      expireAfterWriteInMillis: 120000
+

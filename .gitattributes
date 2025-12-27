@@ -1,0 +1,26 @@
+# Git 属性配置
+# 用于管理不同分支的文件差异
+
+# 确保脚本文件使用 LF 换行符
+*.sh text eol=lf
+
+# 确保配置文件使用 LF 换行符
+*.xml text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.properties text eol=lf
+
+# Java 源文件
+*.java text diff=java
+
+# Markdown 文档
+*.md text
+
+# 二进制文件
+*.jar binary
+*.class binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+

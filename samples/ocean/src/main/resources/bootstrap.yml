@@ -1,0 +1,46 @@
+spring:
+  application:
+    name: ocean
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${spring.mynacos.addr}
+        username: ${spring.mynacos.username}
+        password: ${spring.mynacos.password}
+        group: ${spring.mynacos.group:DEFAULT_GROUP}
+      config:
+        #在应用启动时自动从server-addr的Nacos
+        #拉取data-id=服务名-环境.yml的配置信息
+        #作为application.yml被加载
+        file-extension: yml #文件扩展名
+        server-addr: ${spring.mynacos.addr}
+        username: ${spring.mynacos.username}
+        password: ${spring.mynacos.password}
+        group: ${spring.mynacos.group:DEFAULT_GROUP}
+
+
+---
+spring:
+  profiles: node1
+  mynacos:
+    addr: 10.10.12.81:8848
+    username: nacos
+    password: j4ZsVJA6JcmzlPbJSb
+    group: test-group
+---
+spring:
+  profiles: node2
+  mynacos:
+    addr: 10.10.12.81:8848
+    username: nacos
+    password: j4ZsVJA6JcmzlPbJSb
+    group: test-group
+
+---
+spring:
+  profiles: node3
+  mynacos:
+    addr: 10.10.12.81:8848
+    username: nacos
+    password: j4ZsVJA6JcmzlPbJSb
+    group: test-group

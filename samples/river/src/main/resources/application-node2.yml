@@ -1,0 +1,108 @@
+# 河流服务配置
+server:
+  port: 19002
+
+spring:
+  application:
+    name: river
+
+jetcache:
+  statIntervalMinutes: 15
+  areaInCacheName: true
+  local:
+    default:
+      type: caffeine
+      keyConvertor: fastjson2
+    river:
+      type: caffeine
+      keyConvertor: fastjson2
+  remote:
+    default:
+      type: redis.lettuce
+      keyConvertor: fastjson2
+      broadcastChannel: ${spring.application.name}Channel
+      valueEncoder: java
+      valueDecoder: java
+      mode: cluster
+      uri:
+        - redis://10.10.12.87:6379
+        - redis://10.10.12.87:6380
+        - redis://10.10.12.87:6381
+        - redis://10.10.12.88:6379
+        - redis://10.10.12.88:6380
+        - redis://10.10.12.88:6381
+      defaultExpireInMillis: 5000
+    river:
+      type: redis.lettuce
+      keyConvertor: fastjson2
+      broadcastChannel: ${spring.application.name}Channel
+      valueEncoder: java
+      valueDecoder: java
+      mode: cluster
+      uri:
+        - redis://10.10.12.87:6379
+        - redis://10.10.12.87:6380
+        - redis://10.10.12.87:6381
+        - redis://10.10.12.88:6379
+        - redis://10.10.12.88:6380
+        - redis://10.10.12.88:6381
+      defaultExpireInMillis: 5000
+
+# JXCache Observer 配置
+jxc:
+  observer:
+    enabled: true
+    maxPageSize: 200
+    maxValuePreview: 200
+    totalShards: 8
+
+# JXCache Aggregator 配置
+  aggregator:
+    enabled: true
+    perNodeTimeoutMs: 2000
+    totalTimeoutMs: 4000
+    maxConcurrency: 16
+    maxPageSize: 200
+    observerScanPath: /api/jxc/observer/query
+
+# JXCache Registry 配置
+  registry:
+    # Nacos 注册中心配置（优先级高，默认启用）
+    # 当 Nacos 可用时，优先从 Nacos 注册中心获取服务实例
+    nacos:
+      enabled: true
+      priority: 100  # 优先级，数值越小优先级越高
+      # service-whitelist:  # 可选：服务白名单，为空则支持所有服务
+      #   - water
+    
+    # Fixed 注册中心配置（优先级低，作为降级方案）
+    # 当 Nacos 不可用时，自动降级到固定配置
+    fixed:
+      enabled: true
+      priority: 1000  # 优先级，数值越小优先级越高
+      services:
+        - name: water
+          nodes:
+            - nodeId: droplet-1
+              host: 127.0.0.1
+              port: 18081
+              healthy: true
+            - nodeId: droplet-2
+              host: 127.0.0.1
+              port: 18082
+              healthy: true
+            - nodeId: droplet-3
+              host: 127.0.0.1
+              port: 18083
+              healthy: true
+
+# 日志配置
+logging:
+  level:
+    dev.yibin.samples.river: INFO
+    com.alicp.jetcache: WARN
+    dev.yibin.jxcache: INFO
+    org.springframework.web: INFO
+    org.springframework: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [RIVER] %logger{36} - %msg%n"

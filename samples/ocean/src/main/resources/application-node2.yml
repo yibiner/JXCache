@@ -1,0 +1,93 @@
+# 海洋服务节点2配置
+server:
+  port: 20002
+
+spring:
+  application:
+    name: ocean
+
+# JetCache 配置 - BOTH 缓存类型
+jetcache:
+  statIntervalMinutes: 15
+  areaInCacheName: true
+  local:
+    default:
+      type: caffeine
+      keyConvertor: fastjson2
+      limit: 100
+    ocean:
+      type: caffeine
+      keyConvertor: fastjson2
+      limit: 100
+  remote:
+    default:
+      type: redis.lettuce
+      keyConvertor: fastjson2
+      broadcastChannel: ${spring.application.name}Channel
+      valueEncoder: java
+      valueDecoder: java
+      mode: cluster
+      uri:
+        - redis://10.10.12.87:6379
+        - redis://10.10.12.87:6380
+        - redis://10.10.12.87:6381
+        - redis://10.10.12.88:6379
+        - redis://10.10.12.88:6380
+        - redis://10.10.12.88:6381
+      defaultExpireInMillis: 1800000
+    ocean:
+      type: redis.lettuce
+      keyConvertor: fastjson2
+      broadcastChannel: ${spring.application.name}Channel
+      valueEncoder: java
+      valueDecoder: java
+      mode: cluster
+      uri:
+        - redis://10.10.12.87:6379
+        - redis://10.10.12.87:6380
+        - redis://10.10.12.87:6381
+        - redis://10.10.12.88:6379
+        - redis://10.10.12.88:6380
+        - redis://10.10.12.88:6381
+      defaultExpireInMillis: 1800000
+
+# JXCache Observer 配置
+jxc:
+  observer:
+    enabled: true
+    maxPageSize: 200
+    maxValuePreview: 200
+    totalShards: 8
+
+# JXCache Aggregator 配置
+  aggregator:
+    enabled: true
+    perNodeTimeoutMs: 2000
+    totalTimeoutMs: 4000
+    maxConcurrency: 16
+    maxPageSize: 200
+    observerScanPath: /api/jxc/observer/query
+    observerEntryPath: /api/jxc/observer/entry
+    observerInvalidatePath: /api/jxc/observer/invalidate
+
+# JXCache Registry 配置
+  registry:
+    nacos:
+      enabled: true
+      priority: 100
+      cache:
+        enabled: true
+        expireSeconds: 10
+        maxSize: 1000
+        enableListener: false
+
+# 日志配置
+logging:
+  level:
+    dev.yibin.samples.ocean: INFO
+    com.alicp.jetcache: WARN
+    dev.yibin.jxcache: INFO
+    org.springframework.web: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [NODE2] %logger{36} - %msg%n"
+

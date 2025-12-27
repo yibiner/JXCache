@@ -1,0 +1,7 @@
+server:
+  port: 18081
+spring:
+  application:
+    name: water
+  profiles:
+    active: node1

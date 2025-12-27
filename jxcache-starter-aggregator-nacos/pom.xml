@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>dev.yibin</groupId>
+        <artifactId>jxcache</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <artifactId>jxcache-starter-aggregator-nacos</artifactId>
+    <packaging>jar</packaging>
+
+    <name>jxcache-starter-aggregator-nacos</name>
+    <description>JXCache 聚合与 Nacos 组合启动器。</description>
+
+    <dependencies>
+        <!-- 内部依赖 -->
+        <dependency>
+            <groupId>dev.yibin</groupId>
+            <artifactId>jxcache-starter-aggregator-core</artifactId>
+        </dependency>
+        
+        <!-- 同时引入 registry-fixed 与 registry-nacos -->
+        <!-- registry-fixed 作为降级方案 -->
+        <dependency>
+            <groupId>dev.yibin</groupId>
+            <artifactId>jxcache-registry-fixed</artifactId>
+        </dependency>
+        
+        <!-- registry-nacos 作为主注册中心 -->
+        <dependency>
+            <groupId>dev.yibin</groupId>
+            <artifactId>jxcache-registry-nacos</artifactId>
+        </dependency>
+        
+        <!-- 外部依赖 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+        
+        <!-- 测试依赖 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>
+
