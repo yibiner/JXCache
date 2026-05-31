@@ -23,6 +23,7 @@
         <spring.cloud.version>Hoxton.SR8</spring.cloud.version>
         <spring.cloud.alibaba.version>2.2.5.RELEASE</spring.cloud.alibaba.version>
         <jetcache.version>2.7.1</jetcache.version>
+        <dubbo.version>2.7.8</dubbo.version>
 
         <fastjson2.version>2.0.52</fastjson2.version>
         
@@ -39,10 +40,12 @@
         <module>jxcache-registry-spi</module>
         <module>jxcache-registry-fixed</module>
         <module>jxcache-registry-nacos</module>
+        <module>jxcache-dubbo</module>
         <module>jxcache-aggregator-core</module>
         <module>jxcache-starter-observer</module>
         <module>jxcache-starter-aggregator-core</module>
         <module>jxcache-starter-aggregator-nacos</module>
+        <module>jxcache-starter-dubbo</module>
         <module>jxcache-tests</module>
     </modules>
 
@@ -87,6 +90,12 @@
                 <groupId>com.alicp.jetcache</groupId>
                 <artifactId>jetcache-starter-redis-lettuce</artifactId>
                 <version>${jetcache.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.dubbo</groupId>
+                <artifactId>dubbo</artifactId>
+                <version>${dubbo.version}</version>
             </dependency>
             
             <!-- FastJSON2 依赖 -->
@@ -153,6 +162,11 @@
             </dependency>
             <dependency>
                 <groupId>dev.yibin</groupId>
+                <artifactId>jxcache-dubbo</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>dev.yibin</groupId>
                 <artifactId>jxcache-aggregator-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -169,6 +183,11 @@
             <dependency>
                 <groupId>dev.yibin</groupId>
                 <artifactId>jxcache-starter-aggregator-nacos</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>dev.yibin</groupId>
+                <artifactId>jxcache-starter-dubbo</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>

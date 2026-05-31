@@ -22,6 +22,10 @@ jxcache (父聚合模块)
 ├── jxcache-registry-nacos (Nacos注册中心)
 │   ├── jxcache-common
 │   └── jxcache-registry-spi
+├── jxcache-dubbo (Dubbo consumer缓存插件核心)
+│   ├── JetCache
+│   ├── Spring AOP
+│   └── Dubbo SPI
 ├── jxcache-aggregator-core (聚合核心)
 │   ├── jxcache-common
 │   └── jxcache-registry-spi
@@ -37,6 +41,8 @@ jxcache (父聚合模块)
 │   ├── jxcache-starter-aggregator-core
 │   ├── jxcache-registry-fixed (降级方案)
 │   └── jxcache-registry-nacos (主要注册中心)
+├── jxcache-starter-dubbo (Dubbo consumer缓存插件启动器)
+│   └── jxcache-dubbo
 └── jxcache-tests (测试模块)
     ├── jxcache-starter-observer
     ├── jxcache-starter-aggregator-core
@@ -126,6 +132,19 @@ jxcache (父聚合模块)
   - 超时控制和容错处理
 - **依赖**：jxcache-common, jxcache-registry-spi
 
+#### jxcache-dubbo
+**职责**：提供 Dubbo consumer 侧先缓存调用插件
+- **核心类**：
+  - `JxcacheDubboProxyFactoryWrapper` - Dubbo `ProxyFactory` 包装器
+  - `JxcacheDubboContextHolder` - Dubbo SPI 与 Spring 上下文桥接
+  - `JxcacheDubboApplicationContextBridge` - Spring 容器启动后注入上下文
+- **功能**：
+  - 仅拦截带 `@Cached` 的接口方法
+  - 在 consumer 侧优先执行 JetCache 拦截
+  - 缓存未命中时调用接口 `default` 方法，再转调 no-cache RPC 方法
+  - 通过 Dubbo SPI 方式接入，不侵入现有 Observer / Aggregator 模块
+- **依赖**：jetcache-anno, spring-context, spring-aop, dubbo
+
 ### 集成层
 
 #### jxcache-starter-observer
@@ -162,6 +181,17 @@ jxcache (父聚合模块)
   - 当 Nacos 不可用时自动降级到固定配置
 - **依赖**：jxcache-starter-aggregator-core, jxcache-registry-fixed, jxcache-registry-nacos
 
+#### jxcache-starter-dubbo
+**职责**：提供 Dubbo consumer 缓存插件自动配置
+- **核心类**：
+  - `JxcacheDubboProperties` - 配置属性
+  - `JxcacheDubboAutoConfiguration` - 自动配置类
+- **功能**：
+  - Spring Boot 自动配置支持
+  - 配置属性绑定
+  - 在 Spring 上下文准备完成后向 Dubbo SPI 包装器暴露 ApplicationContext
+- **依赖**：jxcache-dubbo, spring-boot-autoconfigure
+
 ### 测试层
 
 #### jxcache-tests
@@ -183,11 +213,13 @@ jxcache (父聚合模块)
 3. **jxcache-observer** (观察者核心)
 4. **jxcache-registry-fixed** (固定注册中心)
 5. **jxcache-registry-nacos** (Nacos注册中心)
-6. **jxcache-aggregator-core** (聚合核心)
-7. **jxcache-starter-observer** (观察模块启动器)
-8. **jxcache-starter-aggregator-core** (聚合模块启动器)
-9. **jxcache-starter-aggregator-nacos** (聚合 + Nacos 启动器)
-10. **jxcache-tests** (测试模块)
+6. **jxcache-dubbo** (Dubbo consumer缓存插件核心)
+7. **jxcache-aggregator-core** (聚合核心)
+8. **jxcache-starter-observer** (观察模块启动器)
+9. **jxcache-starter-aggregator-core** (聚合模块启动器)
+10. **jxcache-starter-aggregator-nacos** (聚合 + Nacos 启动器)
+11. **jxcache-starter-dubbo** (Dubbo consumer缓存插件启动器)
+12. **jxcache-tests** (测试模块)
 
 ### Maven 自动构建
 
@@ -204,6 +236,7 @@ Maven 会根据依赖关系自动确定构建顺序，无需手动指定。
 - **jxcache-registry-spi**：注册中心 SPI 抽象
 - **jxcache-registry-fixed**：固定注册中心实现
 - **jxcache-registry-nacos**：Nacos 注册中心实现
+- **jxcache-dubbo**：Dubbo consumer 侧先缓存调用插件
 
 ### 集成模块
 - **jxcache-starter-***：提供 Spring Boot 自动配置

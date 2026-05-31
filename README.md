@@ -15,6 +15,7 @@ JXCache 是一个面向 JetCache 体系的缓存可观测与治理扩展，聚�
 - **插件化缓存内省模型**：通过 `LocalCacheIntrospector` 扩展不同本地缓存实现，当前已支持 JetCache Caffeine 与 LinkedHashMap 本地缓存。
 - **注册中心 SPI 化**：内置 Fixed 与 Nacos 两种注册中心实现，通过优先级选择和固定配置兜底，方便从本地调试过渡到服务发现环境。
 - **聚合查询工程化**：使用并发查询、单节点超时、总超时、失败节点记录和部分结果返回机制，避免单个慢节点拖垮整体排查链路。
+- **Dubbo 消费端先缓存调用插件**：通过 Dubbo `ProxyFactory` SPI 在 consumer 侧先执行 JetCache `@Cached` 逻辑，缓存未命中时再转调 no-cache RPC 方法，避免 provider 端重复走一轮缓存代理。
 - **前后端一体化样例**：后端提供 Spring Boot Starter，前端提供 Vue 3 + TypeScript 管理界面，样例工程覆盖 LOCAL 与 BOTH 缓存、多节点和 Nacos/Redis 场景。
 
 ## 能力边界
@@ -70,10 +71,12 @@ jxcache
 ├── jxcache-registry-spi              # 注册中心抽象与选择工厂
 ├── jxcache-registry-fixed            # 静态配置注册中心
 ├── jxcache-registry-nacos            # Nacos 服务发现注册中心
+├── jxcache-dubbo                     # Dubbo consumer 侧先缓存调用插件核心
 ├── jxcache-aggregator-core           # 跨节点聚合查询、一致性检查、批量失效
 ├── jxcache-starter-observer          # Observer Spring Boot Starter
 ├── jxcache-starter-aggregator-core   # Aggregator Spring Boot Starter
 ├── jxcache-starter-aggregator-nacos  # Aggregator + Nacos 组合 Starter
+├── jxcache-starter-dubbo             # Dubbo consumer 侧缓存插件 Starter
 ├── jxcache-tests                     # 单元测试、集成测试、冒烟测试
 ├── samples                           # water / river / ocean 示例工程
 ├── jxcache-ui                        # Vue 3 + TypeScript 管理界面
@@ -207,6 +210,42 @@ jxc:
               port: 18081
               healthy: true
 ```
+
+### 接入 Dubbo Consumer 侧缓存插件
+
+在 Dubbo consumer 服务中加入 Starter：
+
+```xml
+<dependency>
+    <groupId>dev.yibin</groupId>
+    <artifactId>jxcache-starter-dubbo</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
+
+插件默认开启：
+
+```yaml
+jxc:
+  dubbo:
+    enabled: true
+```
+
+推荐按 consumer-first 的方式声明接口：缓存方法放在接口 `default` 方法里，真正的 RPC 调用放到对应的 `NoCache` 方法。
+
+```java
+public interface UserService {
+
+    @Cached(name = "userCache", key = "#userId", expire = 60, cacheType = CacheType.LOCAL)
+    default UserDTO getUser(String userId) {
+        return getUserNoCache(userId);
+    }
+
+    UserDTO getUserNoCache(String userId);
+}
+```
+
+这样 consumer 调用 `getUser()` 时，会先在本地执行 JetCache 拦截；只有缓存未命中时，才会通过 `getUserNoCache()` 发起一次 Dubbo RPC。
 
 ### 启动 UI
 

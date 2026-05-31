@@ -128,9 +128,11 @@ echo   - jxcache-aggregator-core
 echo   - jxcache-registry-spi
 echo   - jxcache-registry-nacos
 echo   - jxcache-registry-fixed
+echo   - jxcache-dubbo
 echo   - jxcache-starter-observer
 echo   - jxcache-starter-aggregator-core
 echo   - jxcache-starter-aggregator-nacos
+echo   - jxcache-starter-dubbo
 echo.
 echo Maven 本地仓库：%USERPROFILE%\.m2\repository\dev\yibin\
 echo.
