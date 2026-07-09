@@ -5,6 +5,10 @@ server:
 spring:
   application:
     name: river
+  cloud:
+    nacos:
+      discovery:
+        enabled: false
 
 jetcache:
   statIntervalMinutes: 15
@@ -16,38 +20,6 @@ jetcache:
     river:
       type: caffeine
       keyConvertor: fastjson2
-  remote:
-    default:
-      type: redis.lettuce
-      keyConvertor: fastjson2
-      broadcastChannel: ${spring.application.name}Channel
-      valueEncoder: java
-      valueDecoder: java
-      mode: cluster
-      uri:
-        - redis://10.10.12.87:6379
-        - redis://10.10.12.87:6380
-        - redis://10.10.12.87:6381
-        - redis://10.10.12.88:6379
-        - redis://10.10.12.88:6380
-        - redis://10.10.12.88:6381
-      defaultExpireInMillis: 5000
-    river:
-      type: redis.lettuce
-      keyConvertor: fastjson2
-      broadcastChannel: ${spring.application.name}Channel
-      valueEncoder: java
-      valueDecoder: java
-      mode: cluster
-      uri:
-        - redis://10.10.12.87:6379
-        - redis://10.10.12.87:6380
-        - redis://10.10.12.87:6381
-        - redis://10.10.12.88:6379
-        - redis://10.10.12.88:6380
-        - redis://10.10.12.88:6381
-      defaultExpireInMillis: 5000
-
 # JXCache Observer 配置
 jxc:
   observer:
@@ -70,7 +42,7 @@ jxc:
     # Nacos 注册中心配置（优先级高，默认启用）
     # 当 Nacos 可用时，优先从 Nacos 注册中心获取服务实例
     nacos:
-      enabled: true
+      enabled: false
       priority: 100  # 优先级，数值越小优先级越高
       # service-whitelist:  # 可选：服务白名单，为空则支持所有服务
       #   - water

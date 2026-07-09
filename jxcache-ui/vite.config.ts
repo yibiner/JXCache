@@ -14,9 +14,8 @@ export default defineConfig({
     port: 5173,
     proxy: {
       '/api': {
-      target: 'https://api-sit.ecoflow.com',
-      changeOrigin: true,
-      rewrite: (path) => path.replace(/^\/api/, '/storm/api')
+      target: 'http://localhost:18081',
+      changeOrigin: true
     }
     }
   },
