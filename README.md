@@ -1,12 +1,16 @@
 # JXCache
 
-[License](LICENSE)
-[Java](https://www.oracle.com/java/)
-[Spring Boot](https://spring.io/projects/spring-boot)
-[JetCache](https://github.com/alibaba/jetcache)
-[Vue](jxcache-ui)
+[![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
+[![Java](https://img.shields.io/badge/Java-8%2B-ED8B00?logo=openjdk&logoColor=white)](https://www.oracle.com/java/)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-2.3.x-6DB33F?logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
+[![JetCache](https://img.shields.io/badge/JetCache-2.7.x-1677FF)](https://github.com/alibaba/jetcache)
+[![Dubbo](https://img.shields.io/badge/Dubbo-consumer--first-cache-CB3837)](jxcache-dubbo)
+[![Vue](https://img.shields.io/badge/Vue-3-4FC08D?logo=vuedotjs&logoColor=white)](jxcache-ui)
+[![TypeScript](https://img.shields.io/badge/TypeScript-UI-3178C6?logo=typescript&logoColor=white)](jxcache-ui)
 
-JXCache 是一个面向 JetCache 体系的缓存可观测与治理扩展，聚焦**本地缓存可视化、跨节点聚合查询、缓存一致性排查和缓存失效操作**。它不是另一个缓存框架，而是给已经落地 JetCache 的 Spring Boot 微服务补上一层可观察、可诊断、可扩展的工程化能力。
+**JXCache** 是一个面向 JetCache 生态的缓存工具集，当前重点补齐 Spring Boot 微服务在缓存运行期的**可观测、可诊断与可操作**能力。
+
+它不是另一个缓存框架，也不替代 JetCache 的核心缓存能力；JXCache 更像是 JetCache 落地后的工程化辅助层，帮助团队查看本地缓存内容、跨节点聚合查询缓存状态、排查多实例缓存一致性问题，并在必要时执行指定 key 的缓存失效操作。后续它也会继续向指标、审计、安全控制和更多缓存内省适配扩展。
 
 ## 项目亮点
 
